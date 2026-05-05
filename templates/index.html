@@ -3,36 +3,48 @@
 
 <head>
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Roboflow + Replit Example</title>
 
-  <!-- Load roboflow.js, the script that will handle loading and running our computer vision model in the browser -->
+  <!-- БЛОК ПОДКЛЮЧЕНИЯ ВНЕШНИХ РЕСУРСОВ
+       Загрузка сторонних библиотек и стилей через CDN и статику -->
+
+  <!-- Подключение библиотеки inferencejs с CDN jsDelivr —
+       именно она обеспечивает запуск моделей Roboflow прямо в браузере,
+       без отправки данных на сервер (локальный инференс через WebGL/WASM) -->
   <script src="https://cdn.jsdelivr.net/npm/inferencejs"></script>
   
+  <!-- Подключение файла стилей из локальной статики Flask -->
   <link rel="stylesheet" href="/static/styles.css" />
 
+  <!-- БЛОК КОНФИГУРАЦИИ МОДЕЛИ КОМПЬЮТЕРНОГО ЗРЕНИЯ
+       Задаёт параметры подключения к API Roboflow и настройки модели.
+       Эти переменные читаются из script.js -->
   <script>
-    // Replace the key below with your Roboflow publishable key
+    // Публичный ключ API Roboflow — используется для аутентификации
+    // при загрузке модели. Безопасен для хранения на фронтенде,
+    // так как предоставляет только право на чтение/инференс.
     var publishable_key = "rf_l8GLzZgLQL6gZLAin1iU";
 
-    // Change these values to set your model name, version, and the
-    // confidence threshold that must be met for the model to return
-    // a prediction.
-
-    // We recommend setting a low CONFIDENCE_THRESHOLD value while testing
-    // and filtering out predictions by confidence level using the
-    //"Prediction Confidence %" filter
-
+    // Минимальный порог уверенности модели при первичной фильтрации.
+    // Рекомендуется ставить низкое значение при тестировании,
+    // а точную фильтрацию выполнять через ползунок на странице.
     const CONFIDENCE_THRESHOLD = 0.1;
+
+    // Название модели на Roboflow Universe — microsoft-coco распознаёт
+    // 80 классов объектов повседневного использования
     const MODEL_NAME = "microsoft-coco";
+
+    // Версия модели на Roboflow Universe
     const MODEL_VERSION = 9;
   </script>
 </head>
 
 <body>
   <main>
+
+    <!-- БЛОК ИНФОРМАЦИОННОГО ОПИСАНИЯ
+         Заголовок и текстовое описание возможностей приложения -->
     <h1>Roboflow + Replit Web Example 🚀</h1>
     <p>Roboflow enables you to build and run custom computer vision models in your browser, on your device (i.e. NVIDIA
       Jetson, Luxonis OAK, via Docker), and via API.
@@ -44,26 +56,43 @@
     <p>Using the demo below, you can identify <a href="https://universe.roboflow.com/jacob-solawetz/microsoft-coco">80
         different objects</a> using your webcam, from people to chairs to cups.</p>
 
+    <!-- Индикатор загрузки — отображается пока модель инициализируется,
+         скрывается в script.js после первого успешного инференса -->
     <p id="loading">Loading...</p>
 
-    <!-- The canvas below is required -->
+    <!-- БЛОК ВИДЕОИНТЕРФЕЙСА
+         Холст (canvas) служит поверхностью для отрисовки рамок поверх
+         видеопотока с камеры. Сам элемент <video> добавляется в DOM
+         динамически через script.js после получения разрешения камеры. -->
     <section class="infer-widget">
+      <!-- Холст 640×480 — на него накладываются ограничивающие рамки.
+           Реальный видеоэлемент вставляется рядом через script.js -->
       <canvas width="640" height="480" id="video_canvas"></canvas>
     </section>
 
+    <!-- БЛОК УПРАВЛЕНИЯ НАСТРОЙКАМИ
+         Ползунок для интерактивной регулировки порога уверенности
+         в реальном времени без перезагрузки страницы -->
     <section id="settings">
       <label for="confidence">Prediction Confidence %</label><br>
+      <!-- Ползунок диапазон 1–100, по умолчанию 60.
+           Событие "input" обрабатывается функцией changeConfidence() в script.js -->
       <input type="range" min="1" max="100" value="60" class="slider" id="confidence">
     </section>
 
+    <!-- БЛОК НАВИГАЦИОННЫХ ССЫЛОК
+         Кнопки для перехода к документации Roboflow и каталогу моделей -->
     <section class="links">
       <a href="https://blog.roboflow.com/getting-started-with-roboflow/" class="styled-button">Build a Custom Model</a>
       <a href="https://universe.roboflow.com" class="styled-button styled-button-turqouise">Explore 50k+
         Models and Datasets</a>
     </section>
 
-    <!-- Load our application logic -->
+    <!-- БЛОК ПОДКЛЮЧЕНИЯ ЛОГИКИ ПРИЛОЖЕНИЯ
+         script.js загружается в конце body, чтобы к моменту его выполнения
+         все DOM-элементы (canvas, ползунок и т.д.) уже существовали -->
     <script src="/static/script.js"></script>
+
   </main>
 </body>
 

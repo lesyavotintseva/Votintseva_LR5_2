@@ -1,20 +1,38 @@
-[tool.poetry]
-name = "python-template"
-version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+# БЛОК МЕТАДАННЫХ ПРОЕКТА
+# Общая информация о пакете Python, управляемом через Poetry
 
+[tool.poetry]
+name = "python-template"          # Название пакета
+version = "0.1.0"                 # Версия пакета
+description = ""                  # Краткое описание проекта
+authors = ["Your Name <you@example.com>"]  # Список авторов
+
+# БЛОК ОСНОВНЫХ ЗАВИСИМОСТЕЙ
+# Пакеты, необходимые для работы приложения в production-окружении.
+# Poetry автоматически разрешает версии и записывает их в poetry.lock
 [tool.poetry.dependencies]
-python = ">=3.10.0,<3.11"
-numpy = "^1.22.2"
-replit = "^3.2.4"
-Flask = "^2.2.0"
-urllib3 = "^1.26.12"
+python = ">=3.10.0,<3.11"   # Ограничение на версию интерпретатора Python
+numpy = "^1.22.2"            # Библиотека численных вычислений (работа с массивами, матрицами)
+replit = "^3.2.4"            # SDK Replit: доступ к базе данных Replit, переменным среды и т.д.
+Flask = "^2.2.0"             # Веб-фреймворк: обработка HTTP-запросов, роутинг, шаблонизация
+urllib3 = "^1.26.12"         # HTTP-клиент низкого уровня (транзитная зависимость Replit SDK)
+
+# БЛОК ЗАВИСИМОСТЕЙ ДЛЯ РАЗРАБОТКИ
+# Инструменты, используемые только в процессе разработки:
+# отладка, линтинг, автодополнение кода в IDE.
+# В production-окружение НЕ устанавливаются.
 
 [tool.poetry.dev-dependencies]
-debugpy = "^1.6.2"
+debugpy = "^1.6.2"  # Отладчик Python, совместимый с VS Code / Replit Debugger
+
+# Языковой сервер Python для Replit (автодополнение, навигация, рефакторинг)
+# Устанавливается с расширениями: yapf (форматирование), rope (рефакторинг), pyflakes (линтинг)
 replit-python-lsp-server = {extras = ["yapf", "rope", "pyflakes"], version = "^1.5.9"}
 
+# БЛОК СИСТЕМЫ СБОРКИ
+# Определяет бэкенд, используемый pip/Poetry для сборки пакета.
+# poetry-core — стандартный инструмент сборки экосистемы Poetry.
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]   # Минимальная версия poetry-core для сборки
+build-backend = "poetry.core.masonry.api"  # Точка входа бэкенда сборки по стандарту PEP 517
