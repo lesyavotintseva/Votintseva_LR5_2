@@ -1,41 +1,55 @@
-# The command that runs the program. If the interpreter field is set, it will have priority and this run command will do nothing
-run = "python3 main.py"
+# БЛОК ОСНОВНЫХ НАСТРОЕК ЗАПУСКА
+# Определяет язык, точку входа и команду запуска проекта
+run = "python3 main.py" # Команда запуска при нажатии кнопки Run в Replit
 
 # The primary language of the repl. There can be others, though!
-language = "python3"
-entrypoint = "main.py"
-# A list of globs that specify which files and directories should
-# be hidden in the workspace.
-hidden = ["venv", ".config", "**/__pycache__", "**/.mypy_cache", "**/*.pyc"]
-modules = ["python-3.10"]
+language = "python3" # Первичный язык проекта
+entrypoint = "main.py" # Файл, открываемый в редакторе по умолчанию
+hidden = [
+  "venv",
+  ".config",
+  "**/__pycache__",
+  "**/.mypy_cache",
+  "**/*.pyc",
+] # Скрытые папки в файловом дереве IDE
+modules = [
+  "python-3.10",
+] # Модуль среды выполнения: Python 3.10 (управляется Replit)
 
-# Specifies which nix channel to use when building the environment.
+# БЛОК СИСТЕМНОГО ОКРУЖЕНИЯ NIX
+# Определяет канал Nix для воспроизводимой сборки зависимостей
 [nix]
 channel = "stable-22_11"
 packages = ["gdb"]
 
 [env]
 
-# Enable unit tests. This is only supported for a few languages.
+# Включите модульные тесты. Эта функция поддерживается только для некоторых языков.
 [unitTest]
 language = "python3"
 
-# These are the files that need to be preserved when this 
-# language template is used as the base language template
-# for Python repos imported from GitHub
+# Это файлы, которые необходимо сохранить, если этот
+# языковой шаблон используется в качестве базового языкового шаблона
+# для репозиториев Python, импортированных из GitHub
 [gitHubImport]
 requiredFiles = [".replit", "replit.nix", ".config", "venv"]
 
+# БЛОК КОНФИГУРАЦИИ ДЕПЛОЯ
+# Команда запуска в production-окружении Replit Deployments
 [deployment]
 run = ["sh", "-c", "python3 main.py"]
 
+# БЛОК МАППИНГА ПОРТОВ
+# Проброс внутреннего порта 5000 на внешний порт 80
 [[ports]]
-localPort = 5000
-externalPort = 80
+localPort = 5000  # Порт, на котором слушает Flask внутри контейнера
+externalPort = 80 # Внешний порт, доступный из браузера через прокси Replit
 
 [agent]
 expertMode = true
 
+# БЛОК КОНФИГУРАЦИИ ВОРКФЛОУ (WORKFLOW)
+# Определяет задачи запуска для кнопки Run и фонового выполнения
 [workflows]
 runButton = "Project"
 
